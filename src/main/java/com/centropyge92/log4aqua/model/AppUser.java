@@ -12,7 +12,6 @@ import java.util.Date;
 @Data
 public class AppUser {
 
-
     @Id
     @GeneratedValue
     private int id;
