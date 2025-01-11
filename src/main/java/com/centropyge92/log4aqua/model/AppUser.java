@@ -21,13 +21,11 @@ public class AppUser {
     private String email;
     private int themeColor;
 
-    @JsonIgnore
-    private String password;
+    private String provider;
+    private String providerId;
 
     private Date signupDate = new Date();
     private String role = "USER";
-    private MemberStatus memberStatus;
 
-    public enum MemberStatus {VALIDATION_EMAIL, BANNED, EMAIL_CONFIRMED, BLOCKED }
 
 }
