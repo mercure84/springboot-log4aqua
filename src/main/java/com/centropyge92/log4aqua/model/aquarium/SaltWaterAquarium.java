@@ -5,8 +5,8 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @EqualsAndHashCode(callSuper = true)
-@Data
 @Entity
+@Data
 public class SaltWaterAquarium extends Aquarium {
 
     private TypeOfMaintenance typeOfMaintenance ;
