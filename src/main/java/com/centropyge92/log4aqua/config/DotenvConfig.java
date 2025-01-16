@@ -1,4 +1,4 @@
-package com.centropyge92.log4aqua;
+package com.centropyge92.log4aqua.config;
 
 
 import io.github.cdimascio.dotenv.Dotenv;
