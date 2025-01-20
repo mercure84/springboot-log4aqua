@@ -19,10 +19,10 @@ public abstract class Aquarium {
     @GeneratedValue
     private int id;
     private String name;
+    private String modelName;
 
-    private int length;
-    private int width;
-    private int height;
+
+    private int volume;
 
     private Date startDate = new Date();
 
@@ -30,7 +30,5 @@ public abstract class Aquarium {
     private AppUser appUser;
     private int sumpVolume;
 
-    public float getRawVolume() {
-        return (float) (this.length * this.width * this.height) /1000;
-    }
+
 }
