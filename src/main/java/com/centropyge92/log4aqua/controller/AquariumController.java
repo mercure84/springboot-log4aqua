@@ -7,13 +7,11 @@ import com.centropyge92.log4aqua.model.aquarium.SaltWaterAquarium;
 import com.centropyge92.log4aqua.service.AppUserService;
 import com.centropyge92.log4aqua.service.AquariumService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
 
 @RestController
