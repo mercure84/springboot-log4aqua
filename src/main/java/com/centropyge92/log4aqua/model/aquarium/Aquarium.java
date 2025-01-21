@@ -12,7 +12,7 @@ import java.util.Date;
 
 @Entity
 @Data
-public abstract class Aquarium {
+public class Aquarium {
 
 
     @Id
@@ -28,7 +28,7 @@ public abstract class Aquarium {
 
     @ManyToOne
     private AppUser appUser;
-    private int sumpVolume;
+    private int sumpVolume = 0;
 
 
 }

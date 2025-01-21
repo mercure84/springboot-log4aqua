@@ -2,10 +2,9 @@ package com.centropyge92.log4aqua.service;
 
 import com.centropyge92.log4aqua.model.AppUser;
 import com.centropyge92.log4aqua.repository.AppUserRepository;
+import org.springframework.security.core.userdetails.User;
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.oauth2.jwt.Jwt;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -17,19 +16,19 @@ public class AppUserService {
     @Autowired
     private AppUserRepository appUserRepository;
 
-    public void saveOrUpdateUser(Authentication authentication) {
-        Jwt jwt = (Jwt) authentication.getPrincipal();
-        String email = jwt.getClaim("email");
-        String name = jwt.getClaim("name");
-
-        AppUser user = appUserRepository.findByEmail(email);
+    public AppUser saveOrUpdateUser(User user) {
         if (user == null) {
-            user = new AppUser();
-            user.setEmail(email);
-            user.setUserName(name);
-            user.setProvider(jwt.getIssuer().toString());
-            appUserRepository.save(user);
+            throw new IllegalArgumentException("User object is null");
         }
+        String email = user.getUsername();
+        AppUser appUser = appUserRepository.findByEmail(email);
+        if (appUser == null) {
+            appUser = new AppUser();
+            appUser.setEmail(email);
+            appUser.setProvider("firebase");
+            return appUserRepository.save(appUser);
+        }
+        return appUser;
     }
 
 
