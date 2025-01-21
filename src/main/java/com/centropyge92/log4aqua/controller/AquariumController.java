@@ -31,7 +31,7 @@ public class AquariumController {
         return aquariumService.getAllAquariumsByUserId(appUser.getId());
     }
 
-    @GetMapping("/deleteAquarium/{id}")
+    @DeleteMapping("/deleteAquarium/{id}")
     public void deleteAquarium(@PathVariable int id, @AuthenticationPrincipal User user) {
         AppUser appUser = appUserService.getAppUser(user.getUsername()).orElseThrow(() -> new RuntimeException("User not found"));
         List<Aquarium> allAquariumsByUserId = aquariumService.getAllAquariumsByUserId(appUser.getId()).orElseThrow(() -> new RuntimeException("Aquarium not found"));
