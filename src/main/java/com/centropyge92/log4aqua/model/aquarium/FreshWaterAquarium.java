@@ -9,4 +9,5 @@ import lombok.EqualsAndHashCode;
 @Data
 public class FreshWaterAquarium extends Aquarium {
 
+
 }

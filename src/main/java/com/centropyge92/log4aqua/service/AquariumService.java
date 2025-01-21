@@ -16,20 +16,24 @@ public class AquariumService {
     @Autowired
     AquariumRepository aquariumRepository;
 
-
-    public Optional<Aquarium> getAquarium(int id){
-        return  aquariumRepository.findById(id);
+    public void deleteAquarium(int id) {
+        aquariumRepository.deleteById(id);
     }
 
-    public Optional<List<Aquarium>> getAllAquariums(){
+
+    public Optional<Aquarium> getAquarium(int id) {
+        return aquariumRepository.findById(id);
+    }
+
+    public Optional<List<Aquarium>> getAllAquariums() {
         return Optional.of(aquariumRepository.findAll());
     }
 
-    public Optional<List<Aquarium>> getAllAquariumsByUserId(int userId){
+    public Optional<List<Aquarium>> getAllAquariumsByUserId(int userId) {
         return Optional.of(aquariumRepository.getAllByAppUserId(userId));
     }
 
-    public void saveAquarium(Aquarium aquarium){
+    public void saveAquarium(Aquarium aquarium) {
         aquariumRepository.save(aquarium);
     }
 

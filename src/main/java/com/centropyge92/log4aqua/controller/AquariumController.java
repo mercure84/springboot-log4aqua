@@ -29,20 +29,32 @@ public class AquariumController {
     public Optional<List<Aquarium>> getAquariumsByAppUser(@AuthenticationPrincipal User user) {
         AppUser appUser = appUserService.getAppUser(user.getUsername()).orElseThrow(() -> new RuntimeException("User not found"));
         return aquariumService.getAllAquariumsByUserId(appUser.getId());
+    }
+
+    @GetMapping("/deleteAquarium/{id}")
+    public void deleteAquarium(@PathVariable int id, @AuthenticationPrincipal User user) {
+        AppUser appUser = appUserService.getAppUser(user.getUsername()).orElseThrow(() -> new RuntimeException("User not found"));
+        List<Aquarium> allAquariumsByUserId = aquariumService.getAllAquariumsByUserId(appUser.getId()).orElseThrow(() -> new RuntimeException("Aquarium not found"));
+        //check if aquarium belows to the user
+        if (allAquariumsByUserId.stream().noneMatch(aquarium -> aquarium.getId() == id)) {
+            throw new RuntimeException("Aquarium not found for this user");
+        } else {
+            aquariumService.deleteAquarium(id);
+        }
 
 
     }
 
 
-    @PostMapping("/createNewAquarium/{waterType}")
-    public Aquarium createNewAquarium(@RequestBody Aquarium aquarium, @PathVariable String waterType, @AuthenticationPrincipal User user) throws Exception {
+    @PostMapping("/createOrUpdateAquarium/{waterType}")
+    public Aquarium createOrUpdate(@RequestBody Aquarium aquarium, @PathVariable String waterType, @AuthenticationPrincipal User user) throws Exception {
         if (aquarium == null) {
             throw new Exception("Aquarium cannot be null");
         }
         AppUser appUser = appUserService.getAppUser(user.getUsername()).orElseThrow(() -> new Exception("User not found"));
-        System.out.println("NOUVEL AQUARIUM !!!");
         if (waterType.equals("fresh")) {
             FreshWaterAquarium newAquarium = new FreshWaterAquarium();
+
             newAquarium.setAppUser(appUser);
             newAquarium.setName(aquarium.getName());
             newAquarium.setModelName(aquarium.getModelName());
@@ -53,6 +65,13 @@ public class AquariumController {
             return newAquarium;
         } else {
             SaltWaterAquarium newAquarium = new SaltWaterAquarium();
+            if(aquarium.getId() != 0) {
+                Optional<Aquarium> existingAquarium = aquariumService.getAquarium(aquarium.getId());
+                if(existingAquarium.isPresent()) {
+                    newAquarium.setId(existingAquarium.get().getId());
+                    System.out.println("UPDATE AQUARIUM");
+                }
+            }
             newAquarium.setAppUser(appUser);
             newAquarium.setName(aquarium.getName());
             newAquarium.setModelName(aquarium.getModelName());
