@@ -20,5 +20,9 @@ public class WaterTestService {
 
     }
 
+    public void addWaterTest(WaterTest waterTest) {
+        waterTestRepository.save(waterTest);
+    }
+
 
 }

@@ -1,16 +1,16 @@
 package com.centropyge92.log4aqua.controller;
 
 
+import com.centropyge92.log4aqua.model.AppUser;
 import com.centropyge92.log4aqua.model.waterTest.WaterTest;
 import com.centropyge92.log4aqua.model.aquarium.Aquarium;
+import com.centropyge92.log4aqua.service.AppUserService;
 import com.centropyge92.log4aqua.service.AquariumService;
 import com.centropyge92.log4aqua.service.WaterTestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
@@ -25,12 +25,30 @@ public class WaterTestController {
     @Autowired
     AquariumService aquariumService;
 
+    @Autowired
+    AppUserService appUserService;
+
     @GetMapping("/getWaterTests/{id}")
     public Optional<List<WaterTest>> getAllTestsByUser(@PathVariable int id, @AuthenticationPrincipal User user) {
         System.out.println("FETCHING WATER TESTS");
         Aquarium currentAquarium = aquariumService.getAquarium(id).orElseThrow(() -> new RuntimeException("Aquarium not found"));
-
         return Optional.ofNullable(waterTestService.getWaterTestsByAquariumId(currentAquarium.getId()));
+    }
+
+    @PostMapping("/addWaterTest/{id}")
+    public void addWaterTest(@PathVariable int id, @RequestBody WaterTest waterTest, @AuthenticationPrincipal User user) {
+        System.out.println("ADDING WATER TEST");
+        AppUser appUser = appUserService.getAppUser(user.getUsername()).orElseThrow(() -> new RuntimeException("User not found"));
+        List<Aquarium> allAquariumsByUserId = aquariumService.getAllAquariumsByUserId(appUser.getId()).orElseThrow(() -> new RuntimeException("Aquarium not found"));
+        Aquarium currentAquarium = aquariumService.getAquarium(id).orElseThrow(() -> new RuntimeException("Aquarium not found"));
+        if (allAquariumsByUserId.stream().noneMatch(aquarium -> aquarium.getId() == id)) {
+            throw new RuntimeException("Aquarium not found for this user");
+        } else {
+            waterTest.setAquarium(currentAquarium);
+            System.out.println("REGISTERING a NEW TEST ==> "+ waterTest);
+            waterTestService.addWaterTest(waterTest);
+
+        }
     }
 
 

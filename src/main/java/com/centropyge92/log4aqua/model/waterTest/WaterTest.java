@@ -7,7 +7,7 @@ import com.centropyge92.log4aqua.model.aquarium.Aquarium;
 
 import java.util.Date;
 import java.util.EnumMap;
-import java.util.Map;
+import java.util.List;
 
 @Data
 @Entity
@@ -16,16 +16,11 @@ public class WaterTest {
     @Id
     @GeneratedValue
     private int id;
-
     private Date date = new Date();
+    private String notes;
 
-    @ElementCollection
-    @CollectionTable
-    @MapKeyColumn
-    @Column
-    @Enumerated(EnumType.STRING)
-    private Map<WaterTestType, Float> tests = new EnumMap<>(WaterTestType.class);
-
+    @OneToMany(cascade = CascadeType.ALL)
+    private List<SingleTest> tests;
     @ManyToOne
     @JsonIgnore
     private Aquarium aquarium;
