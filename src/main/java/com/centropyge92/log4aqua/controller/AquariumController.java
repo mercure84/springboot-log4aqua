@@ -43,7 +43,6 @@ public class AquariumController {
 
     }
 
-
     @PostMapping("/createOrUpdateAquarium/{waterType}")
     public Aquarium createOrUpdate(@RequestBody Aquarium aquarium, @PathVariable String waterType, @AuthenticationPrincipal User user) throws Exception {
         if (aquarium == null) {

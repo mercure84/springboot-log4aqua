@@ -16,17 +16,6 @@ public class AppUserController {
     @Autowired
     AppUserService appUserService;
 
-    @GetMapping("/helloworld")
-    public String helloWorld() {
-        System.out.println("Nous sommes iciiii");
-        return "Hello World";
-    }
-
-    @GetMapping("/protected")
-    public String protectedEndpoint(@AuthenticationPrincipal User user) {
-        return "Hello, " + user.getUsername() + "!";
-    }
-
     @GetMapping("/getAppUser")
     public AppUser getAppUser(@AuthenticationPrincipal User user) {
         return appUserService.saveOrUpdateUser(user);
