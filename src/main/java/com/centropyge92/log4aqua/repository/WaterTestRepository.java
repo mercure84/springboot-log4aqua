@@ -9,6 +9,7 @@ import java.util.List;
 @Repository
 public interface WaterTestRepository extends JpaRepository<WaterTest, Integer> {
 
-    public List<WaterTest> getWaterTestsByAquariumId(int aquariumId);
+    public List<WaterTest> getWaterTestsByAquariumIdOrderByDateDesc(int aquariumId);
 
+    public WaterTest getWaterTestById(int id);
 }

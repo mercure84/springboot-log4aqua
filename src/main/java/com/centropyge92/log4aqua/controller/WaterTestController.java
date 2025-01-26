@@ -32,7 +32,7 @@ public class WaterTestController {
     public Optional<List<WaterTest>> getAllTestsByUser(@PathVariable int id, @AuthenticationPrincipal User user) {
         System.out.println("FETCHING WATER TESTS");
         Aquarium currentAquarium = aquariumService.getAquarium(id).orElseThrow(() -> new RuntimeException("Aquarium not found"));
-        return Optional.ofNullable(waterTestService.getWaterTestsByAquariumId(currentAquarium.getId()));
+        return Optional.ofNullable(waterTestService.getWaterTestsByAquariumIdOrderByDateDesc(currentAquarium.getId()));
     }
 
     @PostMapping("/addWaterTest/{id}")
@@ -47,10 +47,22 @@ public class WaterTestController {
             waterTest.setAquarium(currentAquarium);
             System.out.println("REGISTERING a NEW TEST ==> "+ waterTest);
             waterTestService.addWaterTest(waterTest);
-
         }
     }
 
+    @DeleteMapping("/deleteWaterTest/{id}")
+    public void deleteTest(@PathVariable int id, @AuthenticationPrincipal User user) {
+        System.out.println("DELETING WATER TEST");
+        AppUser appUser = appUserService.getAppUser(user.getUsername()).orElseThrow(() -> new RuntimeException("User not found"));
+        // find the test by the iD
+        WaterTest testTodelete = (WaterTest) waterTestService.getWaterTest(id).orElseThrow(() -> new RuntimeException("Test not found"));
+        List<Aquarium> allAquariumsByUserId = aquariumService.getAllAquariumsByUserId(appUser.getId()).orElseThrow(() -> new RuntimeException("Aquarium not found"));
 
-
+        if (allAquariumsByUserId.stream().noneMatch(aquarium -> aquarium.getId() == testTodelete.getAquarium().getId())) {
+            throw new RuntimeException("Aquarium not found for this user");
+        } else {
+            System.out.println("Delete TEst ==> "+ testTodelete);
+            waterTestService.deleteWaterTest(testTodelete);
+        }
+    }
 }

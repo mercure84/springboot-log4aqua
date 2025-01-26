@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Data
@@ -15,8 +16,8 @@ public class WaterTestService {
     @Autowired
     WaterTestRepository waterTestRepository;
 
-    public List<WaterTest> getWaterTestsByAquariumId(int id) {
-        return waterTestRepository.getWaterTestsByAquariumId(id);
+    public List<WaterTest> getWaterTestsByAquariumIdOrderByDateDesc(int id) {
+        return waterTestRepository.getWaterTestsByAquariumIdOrderByDateDesc(id);
 
     }
 
@@ -25,4 +26,11 @@ public class WaterTestService {
     }
 
 
+    public Optional<Object> getWaterTest(int id) {
+        return Optional.of(waterTestRepository.getWaterTestById(id));
+    }
+
+    public void deleteWaterTest(WaterTest waterTest) {
+        waterTestRepository.delete(waterTest);
+    }
 }
