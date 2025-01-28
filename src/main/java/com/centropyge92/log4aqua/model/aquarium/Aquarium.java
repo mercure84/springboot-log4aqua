@@ -2,13 +2,15 @@ package com.centropyge92.log4aqua.model.aquarium;
 
 
 import com.centropyge92.log4aqua.model.AppUser;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import com.centropyge92.log4aqua.model.Equipment;
+import com.centropyge92.log4aqua.model.waterTest.WaterTest;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Entity
 @Data
@@ -29,6 +31,15 @@ public class Aquarium {
     @ManyToOne
     private AppUser appUser;
     private int sumpVolume = 0;
+
+    @OneToMany(mappedBy = "aquarium", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JsonIgnore
+    private List<Equipment> equipmentList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "aquarium", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @JsonIgnore
+    private List<WaterTest> waterTestList = new ArrayList<>();
+
 
 
 }
