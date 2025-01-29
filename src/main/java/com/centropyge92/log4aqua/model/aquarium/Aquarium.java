@@ -32,6 +32,8 @@ public class Aquarium {
     private AppUser appUser;
     private int sumpVolume = 0;
 
+    private WaterType waterType;
+
     @OneToMany(mappedBy = "aquarium", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonIgnore
     private List<Equipment> equipmentList = new ArrayList<>();
@@ -39,7 +41,5 @@ public class Aquarium {
     @OneToMany(mappedBy = "aquarium", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonIgnore
     private List<WaterTest> waterTestList = new ArrayList<>();
-
-
 
 }

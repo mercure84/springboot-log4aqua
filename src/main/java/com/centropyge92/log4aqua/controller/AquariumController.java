@@ -2,8 +2,6 @@ package com.centropyge92.log4aqua.controller;
 
 import com.centropyge92.log4aqua.model.AppUser;
 import com.centropyge92.log4aqua.model.aquarium.Aquarium;
-import com.centropyge92.log4aqua.model.aquarium.FreshWaterAquarium;
-import com.centropyge92.log4aqua.model.aquarium.SaltWaterAquarium;
 import com.centropyge92.log4aqua.service.AppUserService;
 import com.centropyge92.log4aqua.service.AquariumService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -43,43 +41,14 @@ public class AquariumController {
 
     }
 
-    @PostMapping("/createOrUpdateAquarium/{waterType}")
-    public Aquarium createOrUpdate(@RequestBody Aquarium aquarium, @PathVariable String waterType, @AuthenticationPrincipal User user) throws Exception {
+    @PostMapping("/createOrUpdateAquarium")
+    public Aquarium createOrUpdate(@RequestBody Aquarium aquarium,  @AuthenticationPrincipal User user) throws Exception {
         if (aquarium == null) {
             throw new Exception("Aquarium cannot be null");
         }
         AppUser appUser = appUserService.getAppUser(user.getUsername()).orElseThrow(() -> new Exception("User not found"));
-        if (waterType.equals("fresh")) {
-            FreshWaterAquarium newAquarium = new FreshWaterAquarium();
-
-            newAquarium.setAppUser(appUser);
-            newAquarium.setName(aquarium.getName());
-            newAquarium.setModelName(aquarium.getModelName());
-            newAquarium.setStartDate(aquarium.getStartDate());
-            newAquarium.setVolume(aquarium.getVolume());
-            newAquarium.setSumpVolume(aquarium.getSumpVolume());
-            aquariumService.saveAquarium(newAquarium);
-            return newAquarium;
-        } else {
-            SaltWaterAquarium newAquarium = new SaltWaterAquarium();
-            if(aquarium.getId() != 0) {
-                Optional<Aquarium> existingAquarium = aquariumService.getAquarium(aquarium.getId());
-                if(existingAquarium.isPresent()) {
-                    newAquarium.setId(existingAquarium.get().getId());
-                    System.out.println("UPDATE AQUARIUM");
-                }
-            }
-            newAquarium.setAppUser(appUser);
-            newAquarium.setName(aquarium.getName());
-            newAquarium.setModelName(aquarium.getModelName());
-            newAquarium.setStartDate(aquarium.getStartDate());
-            newAquarium.setVolume(aquarium.getVolume());
-            newAquarium.setSumpVolume(aquarium.getSumpVolume());
-            aquariumService.saveAquarium(newAquarium);
-            return newAquarium;
-        }
-
+        aquarium.setAppUser(appUser);
+        aquariumService.saveAquarium(aquarium);
+        return aquarium;
     }
-
-
 }
