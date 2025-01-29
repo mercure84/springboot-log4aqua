@@ -1,9 +1,6 @@
 package com.centropyge92.log4aqua.model;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Date;
@@ -27,5 +24,7 @@ public class AppUser {
     private Date signupDate = new Date();
     private String role = "MEMBER";
 
+    @OneToOne(cascade = CascadeType.ALL)
+    private AppSettings appSettings;
 
 }

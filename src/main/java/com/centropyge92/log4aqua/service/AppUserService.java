@@ -32,6 +32,10 @@ public class AppUserService {
     }
 
 
+    public void updateAppUserSettings(AppUser appUser) {
+        appUserRepository.save(appUser);
+    }
+
     public Optional<AppUser> getAppUser(String email) {
         return Optional.ofNullable(appUserRepository.findByEmail(email));
     }
