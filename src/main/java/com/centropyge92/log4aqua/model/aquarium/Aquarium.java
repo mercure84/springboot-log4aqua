@@ -7,6 +7,7 @@ import com.centropyge92.log4aqua.model.waterTest.WaterTest;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -36,10 +37,12 @@ public class Aquarium {
 
     @OneToMany(mappedBy = "aquarium", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonIgnore
+    @ToString.Exclude
     private List<Equipment> equipmentList = new ArrayList<>();
 
     @OneToMany(mappedBy = "aquarium", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonIgnore
+    @ToString.Exclude
     private List<WaterTest> waterTestList = new ArrayList<>();
 
 }
