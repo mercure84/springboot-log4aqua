@@ -15,5 +15,7 @@ public class AppSettings {
     private boolean rememberToTestWater = false;
     private int dayInterval = 7;
     private int themeColor = 0;
+    private String iosPushToken;
+    private String androidPushToken;
 
 }

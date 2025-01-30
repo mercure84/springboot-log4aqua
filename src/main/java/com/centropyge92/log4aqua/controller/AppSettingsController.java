@@ -2,6 +2,7 @@ package com.centropyge92.log4aqua.controller;
 
 import com.centropyge92.log4aqua.model.AppSettings;
 import com.centropyge92.log4aqua.model.AppUser;
+import com.centropyge92.log4aqua.model.PushToken;
 import com.centropyge92.log4aqua.service.AppSettingsService;
 import com.centropyge92.log4aqua.service.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,5 +46,19 @@ public class AppSettingsController {
             appUserService.updateAppUserSettings(appUser);
         }
     }
+
+    @PostMapping("/registerPushToken")
+    public void registerPushToken(@RequestBody PushToken pushToken, @AuthenticationPrincipal User user) {
+        System.out.println("Push Token has been received : " + pushToken);
+        AppUser appUser = appUserService.getAppUser(user.getUsername()).orElseThrow(() -> new RuntimeException("User not found"));
+
+        if(pushToken.getPlatform().equals("ios")) {
+            appUser.getAppSettings().setIosPushToken(pushToken.getToken());
+        } else if(pushToken.getPlatform().equals("android")) {
+            appUser.getAppSettings().setAndroidPushToken(pushToken.getToken());
+        }
+        appUserService.updateAppUserSettings(appUser);
+    }
+
 
 }
