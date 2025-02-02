@@ -35,12 +35,12 @@ public class Aquarium {
 
     private WaterType waterType;
 
-    @OneToMany(mappedBy = "aquarium", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "aquarium", cascade = CascadeType.REMOVE)
     @JsonIgnore
     @ToString.Exclude
     private List<Equipment> equipmentList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "aquarium", cascade = CascadeType.REMOVE, orphanRemoval = true)
+    @OneToMany(mappedBy = "aquarium", cascade = CascadeType.REMOVE)
     @JsonIgnore
     @ToString.Exclude
     private List<WaterTest> waterTestList = new ArrayList<>();
