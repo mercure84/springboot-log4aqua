@@ -8,6 +8,7 @@ import com.centropyge92.log4aqua.service.AppUserService;
 import com.centropyge92.log4aqua.service.AquariumService;
 import com.centropyge92.log4aqua.service.WaterTestService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
@@ -29,11 +30,18 @@ public class WaterTestController {
     AppUserService appUserService;
 
     @GetMapping("/getWaterTests/{id}")
-    public Optional<List<WaterTest>> getAllTestsByUser(@PathVariable int id, @AuthenticationPrincipal User user) {
+    public ResponseEntity<List<WaterTest>> getAllTestsByUser(@PathVariable int id) {
         System.out.println("FETCHING WATER TESTS");
-        Aquarium currentAquarium = aquariumService.getAquarium(id).orElseThrow(() -> new RuntimeException("Aquarium not found"));
-        return Optional.ofNullable(waterTestService.getWaterTestsByAquariumIdOrderByDateDesc(currentAquarium.getId()));
+
+        Optional<Aquarium> currentAquarium = aquariumService.getAquarium(id);
+        if (currentAquarium.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        List<WaterTest> tests = waterTestService.getWaterTestsByAquariumIdOrderByDateDesc(currentAquarium.get().getId());
+        return ResponseEntity.ok(tests);
     }
+
 
     @PostMapping("/addWaterTest/{id}")
     public void addWaterTest(@PathVariable int id, @RequestBody WaterTest waterTest, @AuthenticationPrincipal User user) {
