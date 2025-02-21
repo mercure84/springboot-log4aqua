@@ -3,7 +3,7 @@ target/
 !.mvn/wrapper/maven-wrapper.jar
 !**/src/main/**/target/
 !**/src/test/**/target/
-.env*
+src/main/resources/.env
 
 ### STS ###
 .apt_generated
@@ -32,4 +32,5 @@ build/
 
 ### VS Code ###
 .vscode/
-/firebase_private_key.json*
+
+firebase_private_key.json
