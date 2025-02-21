@@ -1,5 +1,6 @@
 package com.centropyge92.log4aqua.service;
 
+import com.centropyge92.log4aqua.model.AppSettings;
 import com.centropyge92.log4aqua.model.AppUser;
 import com.centropyge92.log4aqua.repository.AppUserRepository;
 import org.springframework.security.core.userdetails.User;
@@ -26,6 +27,7 @@ public class AppUserService {
             appUser = new AppUser();
             appUser.setEmail(email);
             appUser.setProvider("firebase");
+            appUser.setAppSettings(new AppSettings());
             return appUserRepository.save(appUser);
         }
         return appUser;

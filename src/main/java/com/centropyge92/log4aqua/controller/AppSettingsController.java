@@ -51,7 +51,7 @@ public class AppSettingsController {
     public void registerPushToken(@RequestBody PushToken pushToken, @AuthenticationPrincipal User user) {
         System.out.println("Push Token has been received : " + pushToken);
         AppUser appUser = appUserService.getAppUser(user.getUsername()).orElseThrow(() -> new RuntimeException("User not found"));
-
+        setDefaultAppSettingsToAppUser(appUser);
         if(pushToken.getPlatform().equals("ios")) {
             appUser.getAppSettings().setIosPushToken(pushToken.getToken());
         } else if(pushToken.getPlatform().equals("android")) {
@@ -60,5 +60,11 @@ public class AppSettingsController {
         appUserService.updateAppUserSettings(appUser);
     }
 
+
+    private void setDefaultAppSettingsToAppUser(AppUser appUser){
+        if(appUser.getAppSettings() == null){
+            appUser.setAppSettings(new AppSettings());
+        }
+    }
 
 }
