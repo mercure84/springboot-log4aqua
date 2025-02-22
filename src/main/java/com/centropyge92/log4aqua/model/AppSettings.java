@@ -5,6 +5,8 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import lombok.Data;
 
+import java.util.Date;
+
 @Data
 @Entity
 public class AppSettings {
@@ -17,5 +19,6 @@ public class AppSettings {
     private int themeColor = 0;
     private String iosPushToken;
     private String androidPushToken;
+    private Date lastWaterTestReminder;
 
 }

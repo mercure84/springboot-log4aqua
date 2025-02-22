@@ -8,6 +8,7 @@ import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -40,5 +41,9 @@ public class AppUserService {
 
     public Optional<AppUser> getAppUser(String email) {
         return Optional.ofNullable(appUserRepository.findByEmail(email));
+    }
+
+    public Optional<List<AppUser>> getAllAppUsers() {
+        return Optional.of(appUserRepository.findAll());
     }
 }
