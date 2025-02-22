@@ -33,4 +33,8 @@ public class WaterTestService {
     public void deleteWaterTest(WaterTest waterTest) {
         waterTestRepository.delete(waterTest);
     }
+
+    public void saveMassWaterTests(List<WaterTest> waterTests) {
+        waterTestRepository.saveAll(waterTests);
+    }
 }
