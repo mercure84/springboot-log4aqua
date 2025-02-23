@@ -30,7 +30,7 @@ public class WaterTestController {
     AppUserService appUserService;
 
     @GetMapping("/getWaterTests/{id}")
-    public ResponseEntity<List<WaterTest>> getAllTestsByUser(@PathVariable int id) {
+    public ResponseEntity<List<WaterTest>> getAllTestsByUser(@PathVariable int id, @AuthenticationPrincipal User user) {
         System.out.println("FETCHING WATER TESTS");
 
         Optional<Aquarium> currentAquarium = aquariumService.getAquarium(id);
@@ -43,9 +43,9 @@ public class WaterTestController {
     }
 
 
-    @PostMapping("/addWaterTest/{id}")
-    public void addWaterTest(@PathVariable int id, @RequestBody WaterTest waterTest, @AuthenticationPrincipal User user) {
-        System.out.println("ADDING WATER TEST");
+    @PostMapping("/saveWaterTest/{id}")
+    public void saveWaterTest(@PathVariable int id, @RequestBody WaterTest waterTest, @AuthenticationPrincipal User user) {
+        System.out.println("SAVING WATER TEST");
         AppUser appUser = appUserService.getAppUser(user.getUsername()).orElseThrow(() -> new RuntimeException("User not found"));
         List<Aquarium> allAquariumsByUserId = aquariumService.getAllAquariumsByUserId(appUser.getId()).orElseThrow(() -> new RuntimeException("Aquarium not found"));
         Aquarium currentAquarium = aquariumService.getAquarium(id).orElseThrow(() -> new RuntimeException("Aquarium not found"));
@@ -53,8 +53,8 @@ public class WaterTestController {
             throw new RuntimeException("Aquarium not found for this user");
         } else {
             waterTest.setAquarium(currentAquarium);
-            System.out.println("REGISTERING a NEW TEST ==> "+ waterTest);
-            waterTestService.addWaterTest(waterTest);
+            System.out.println("Saving a test ==> "+ waterTest);
+            waterTestService.saveWaterTest(waterTest);
         }
     }
 

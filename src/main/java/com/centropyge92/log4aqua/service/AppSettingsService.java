@@ -14,8 +14,8 @@ public class AppSettingsService {
     @Autowired
     AppSettingsRepository appSettingsRepository;
 
-    public AppSettings updateAppSettings(AppSettings appSettings) {
-        return appSettingsRepository.save(appSettings);
+    public void updateAppSettings(AppSettings appSettings) {
+        appSettingsRepository.save(appSettings);
     }
 
     public AppSettings getAppSettings(int id) {
