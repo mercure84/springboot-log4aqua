@@ -1,5 +1,6 @@
 package com.centropyge92.log4aqua.controller;
 
+import com.centropyge92.log4aqua.batch.NotificationScheduler;
 import com.centropyge92.log4aqua.model.aquarium.Aquarium;
 import com.centropyge92.log4aqua.model.waterTest.WaterTest;
 import com.centropyge92.log4aqua.model.waterTest.SingleTest;
@@ -24,6 +25,9 @@ public class TrashToolController {
 
     @Autowired
     AquariumService aquariumService;
+
+    @Autowired
+    NotificationScheduler notificationScheduler;
 
     @GetMapping("/saveBigDataInBase")
     public void saveBigDataInBase() throws FileNotFoundException {
@@ -126,4 +130,13 @@ public class TrashToolController {
             e.printStackTrace();
         }
     }
+
+    @GetMapping("/testPushNotification")
+    public void testPushNotification() {
+        notificationScheduler.sendWaterTestReminder();
+
+    }
+
+
+
 }

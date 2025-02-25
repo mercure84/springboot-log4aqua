@@ -3,6 +3,8 @@ package com.centropyge92.log4aqua.controller;
 import com.centropyge92.log4aqua.model.AppSettings;
 import com.centropyge92.log4aqua.model.AppUser;
 import com.centropyge92.log4aqua.model.PushToken;
+import com.centropyge92.log4aqua.model.waterTest.TestTypeDTO;
+import com.centropyge92.log4aqua.model.waterTest.WaterTestKind;
 import com.centropyge92.log4aqua.service.AppSettingsService;
 import com.centropyge92.log4aqua.service.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,7 +15,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 @RestController
 public class AppSettingsController {
@@ -66,5 +71,16 @@ public class AppSettingsController {
             appUser.setAppSettings(new AppSettings());
         }
     }
+
+
+    @GetMapping("/getTestTypes")
+    public List<TestTypeDTO> getTestTypes() {
+        List<TestTypeDTO> allTypes =  Stream.of(WaterTestKind.values())
+                .map(testType -> new TestTypeDTO(testType.getName(), testType.getUnit()))
+                .collect(Collectors.toList());
+        System.out.println("All TestTypes ==> "+ allTypes);
+        return allTypes;
+    }
+
 
 }

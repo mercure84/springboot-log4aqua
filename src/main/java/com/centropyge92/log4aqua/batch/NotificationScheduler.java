@@ -49,25 +49,32 @@ public class NotificationScheduler {
                             .toList();
                     Date lastWaterTestDate = sortedWaterTests.get(0).getDate();
                     AppSettings appSettings = appUser.getAppSettings();
-                    if (appSettings.getAndroidPushToken() == null || appSettings.getIosPushToken() == null) {
+                    if (appSettings.getAndroidPushToken() == null && appSettings.getIosPushToken() == null) {
                         System.out.println("No push token found for user " + appUser.getId());
-                        break;
+                        continue;
                     }
                     Optional<WaterTestReminder> waterTestReminder = maintenanceTaskService.getWaterTestReminder(aquarium.get().getFirst().getId());
                     if (waterTestReminder.isEmpty() || !waterTestReminder.get().isRememberToTestWater()) {
                         System.out.println("No reminder set for user " + appUser.getId());
-                        break;
+                        continue;
                     }
 
                     int delay = waterTestReminder.get().getDayInterval();
                     if (new Date().getTime() - lastWaterTestDate.getTime() >= (long) delay * 24 * 60 * 60 * 1000) {
                         System.out.println("Sending reminder to user " + appUser.getId());
-                        pushNotificationService
-                                .sendNotificationToDevice(appSettings
-                                        .getIosPushToken(), "Ding Dong 🔔 ! Testez votre eau :)", "Ding Dong ! Testez votre eau :)");
-                        pushNotificationService
-                                .sendNotificationToDevice(appSettings
-                                        .getAndroidPushToken(), "Ding Dong 🔔 ! Testez votre eau :)", "Ding Dong ! Testez votre eau :)");
+                        String iOSToken = appSettings.getIosPushToken();
+                        String androidToken = appSettings.getAndroidPushToken();
+                        if (iOSToken != null) {
+                            pushNotificationService
+                                    .sendNotificationToDevice(appSettings
+                                            .getIosPushToken(), "Ding Dong 🔔 ! Testez votre eau :)", "Ding Dong ! Testez votre eau :)");
+                        }
+
+                        if (androidToken != null) {
+                            pushNotificationService
+                                    .sendNotificationToDevice(appSettings
+                                            .getAndroidPushToken(), "Ding Dong 🔔 ! Testez votre eau :)", "Ding Dong ! Testez votre eau :)");
+                        }
                         waterTestReminder.get().setLastReminder(new Date());
                         maintenanceTaskService.saveWaterTestReminder(waterTestReminder.get());
 
