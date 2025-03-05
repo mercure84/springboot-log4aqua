@@ -8,16 +8,15 @@ import com.centropyge92.log4aqua.model.task.WaterTestReminder;
 import com.centropyge92.log4aqua.model.waterTest.WaterTest;
 import com.centropyge92.log4aqua.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 @Service
-@EnableScheduling
 public class NotificationScheduler {
 
     @Autowired
@@ -36,8 +35,9 @@ public class NotificationScheduler {
 
 
     @Scheduled(cron = "0 0 10 * * ?")
+    @Transactional
     public void sendWaterTestReminder() {
-
+        System.out.println("Sending water test reminder");
         Optional<List<AppUser>> optionalAppUsers = appUserService.getAllAppUsers();
         optionalAppUsers.ifPresent(appUsers -> {
             for (AppUser appUser : appUsers) {
