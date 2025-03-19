@@ -3,6 +3,7 @@ package com.centropyge92.log4aqua.model.aquarium;
 
 import com.centropyge92.log4aqua.model.AppUser;
 import com.centropyge92.log4aqua.model.Equipment;
+import com.centropyge92.log4aqua.model.task.WaterTestReminder;
 import com.centropyge92.log4aqua.model.waterTest.WaterTest;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
@@ -24,25 +25,30 @@ public class Aquarium {
     private String name;
     private String modelName;
 
+    @ManyToOne
+    private AppUser appUser;
 
     private int volume;
 
     private Date startDate = new Date();
 
-    @ManyToOne
-    private AppUser appUser;
     private int sumpVolume = 0;
 
     private WaterType waterType;
 
-    @OneToMany(mappedBy = "aquarium", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "aquarium", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonIgnore
     @ToString.Exclude
     private List<Equipment> equipmentList = new ArrayList<>();
 
-    @OneToMany(mappedBy = "aquarium", cascade = CascadeType.REMOVE)
+    @OneToMany(mappedBy = "aquarium", cascade = CascadeType.REMOVE, orphanRemoval = true)
     @JsonIgnore
     @ToString.Exclude
     private List<WaterTest> waterTestList = new ArrayList<>();
+
+    @OneToMany(mappedBy = "aquarium", cascade = CascadeType.REMOVE)
+    @JsonIgnore
+    @ToString.Exclude
+    private List<WaterTestReminder> waterTestReminders = new ArrayList<>();
 
 }

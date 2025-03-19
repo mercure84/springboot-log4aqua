@@ -42,12 +42,14 @@ public class AquariumController {
     }
 
     @PostMapping("/createOrUpdateAquarium")
-    public Aquarium createOrUpdate(@RequestBody Aquarium aquarium,  @AuthenticationPrincipal User user) throws Exception {
+    public Aquarium createOrUpdate(@RequestBody Aquarium aquarium, @AuthenticationPrincipal User user) throws Exception {
         if (aquarium == null) {
             throw new Exception("Aquarium cannot be null");
         }
         AppUser appUser = appUserService.getAppUser(user.getUsername()).orElseThrow(() -> new Exception("User not found"));
-        aquarium.setAppUser(appUser);
+        List<Aquarium> currentAquariums = aquariumService.getAllAquariumsByUserId(appUser.getId()).orElseThrow(() -> new Exception("Aquarium not found"));
+        currentAquariums.add(aquarium);
+        appUser.setAquariums(currentAquariums);
         aquariumService.saveAquarium(aquarium);
         return aquarium;
     }

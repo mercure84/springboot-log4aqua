@@ -46,4 +46,9 @@ public class AppUserService {
     public Optional<List<AppUser>> getAllAppUsers() {
         return Optional.of(appUserRepository.findAll());
     }
+
+    public void deleteAppUser(AppUser appUser) {
+        appUserRepository.delete(appUser);
+    }
+
 }
