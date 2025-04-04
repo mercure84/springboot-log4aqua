@@ -33,7 +33,6 @@ public class DataBaseCleaner {
         } else {
             System.out.println("No aquariums without user found");
         }
-        // TODO : clean aquariums without user
     }
 
 
