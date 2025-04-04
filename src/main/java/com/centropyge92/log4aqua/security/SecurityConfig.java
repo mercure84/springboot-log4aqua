@@ -19,7 +19,9 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/getTestTypes", "/testPushNotification", "/v3/**", "/swagger-ui/**").permitAll() // Permet l'accès sans authentification
+                        .requestMatchers("/getTestTypes", "/testPushNotification", "/v3/**", "/swagger-ui/**").permitAll()
+                        .requestMatchers("/cleanAquariumWithoutUser").permitAll() // Permet d'accéder à la route
+                        .requestMatchers(new BlockExternalRequestMatcher()).denyAll() // Mais bloque si IP ≠ localhost
                         .anyRequest().authenticated()
                 )
                 .addFilterBefore(firebaseAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

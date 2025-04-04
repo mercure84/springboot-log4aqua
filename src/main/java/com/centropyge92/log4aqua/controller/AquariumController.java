@@ -46,11 +46,16 @@ public class AquariumController {
         if (aquarium == null) {
             throw new Exception("Aquarium cannot be null");
         }
-        AppUser appUser = appUserService.getAppUser(user.getUsername()).orElseThrow(() -> new Exception("User not found"));
-        List<Aquarium> currentAquariums = aquariumService.getAllAquariumsByUserId(appUser.getId()).orElseThrow(() -> new Exception("Aquarium not found"));
-        currentAquariums.add(aquarium);
-        appUser.setAquariums(currentAquariums);
-        aquariumService.saveAquarium(aquarium);
+
+        AppUser appUser = appUserService.getAppUser(user.getUsername())
+                .orElseThrow(() -> new Exception("User not found"));
+
+        // 🔹 Ne pas remplacer la liste mais ajouter l'aquarium
+        aquarium.setAppUser(appUser); // Important !
+        appUser.getAquariums().add(aquarium);
+
+        aquariumService.saveAquarium(aquarium); // Hibernate va gérer la relation
+
         return aquarium;
     }
 }

@@ -11,5 +11,6 @@ public interface AquariumRepository extends JpaRepository<Aquarium, Integer> {
 
 
     public List<Aquarium> getAllByAppUserId(int userId);
+    public List<Aquarium> getAllByAppUserIdIsNull();
 
 }

@@ -37,5 +37,8 @@ public class AquariumService {
         aquariumRepository.save(aquarium);
     }
 
+    public Optional<List<Aquarium>> getAllAquariumsWithoutUser() {
+        return Optional.of(aquariumRepository.getAllByAppUserIdIsNull());
+    }
 
 }
